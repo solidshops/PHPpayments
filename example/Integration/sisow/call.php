@@ -8,8 +8,8 @@ $paymentmethod = "Payment_Integration_Sisow";
 $obj_payment = PHPpayments_Loader::load ( $paymentmethod );
 
 //set credentials
-$obj_payment->addFieldSetting ( "account", "2537309337" );
-$obj_payment->addFieldSetting ( "secret", "d0a3672f0dddedec6536969f45c60e7e6e623492");
+$obj_payment->addFieldSetting ( "account", "???" );
+$obj_payment->addFieldSetting ( "secret", "???");
 //set order data
 $obj_payment->addFieldOrder ( "guid", "12313212313212.3" );
 $obj_payment->addFieldOrder ( "id", "1000" );
