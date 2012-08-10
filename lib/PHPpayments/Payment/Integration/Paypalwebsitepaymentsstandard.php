@@ -3,8 +3,6 @@
 use \PHPpayments\Common\Payment_Integration;
 use \PHPpayments\Common\Payment_IntegrationInterface;
 
-use \PHPpayments\Common\Payment_Integration;
-use \PHPpayments\Common\Payment_IntegrationInterface;
 
 class Payment_Integration_Paypalwebsitepaymentsstandard extends  Payment_Integration implements  Payment_IntegrationInterface {
 	
