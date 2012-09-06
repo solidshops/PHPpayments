@@ -16,8 +16,8 @@ include_once "../../orderdata.php";
 
 //set urls for after payment
 $obj_payment->setUrlSite ( $domain );
-$obj_payment->setUrlSuccess ( $domain . "/orderconfirmation/guid/" . $obj_payment->arr_order['guid'] );
-$obj_payment->setUrlCancel ( $domain . "/ordercancel/guid/" . $obj_payment->arr_order['guid'] );
+$obj_payment->setUrlSuccess ( $domain . "/confirmorder/guid/" . $obj_payment->arr_order['guid'] );
+$obj_payment->setUrlCancel ( $domain . "/cancelorder/guid/" . $obj_payment->arr_order['guid'] );
 $obj_payment->setUrlCallback ( $domain . "/callback" );
 
 //enable sandbox environment

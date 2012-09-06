@@ -10,7 +10,7 @@ $obj_payment->addFieldOrder ( "total", "100");
 //enable sandbox environment
 $obj_payment->enableTestMode ();
 //set credentials
-$obj_payment->addFieldSetting ( "account", "2537309337" );
-$obj_payment->addFieldSetting ( "secret", "d0a3672f0dddedec6536969f45c60e7e6e623492");
+$obj_payment->addFieldSetting ( "account", "???" );
+$obj_payment->addFieldSetting ( "secret", "???");
 //validate the callback
 $obj_result = $obj_payment->validateIpn ( $_GET );
