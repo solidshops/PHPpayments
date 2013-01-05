@@ -8,8 +8,8 @@ $paymentmethod = "Payment_Integration_Mollieideal";
 $obj_payment = PHPpayments_Loader::load ( $paymentmethod );
 
 //set credentials
-$obj_payment->addFieldSetting ( "account", "559477" );
-$obj_payment->addFieldSetting ( "secret", "9815bd2f");
+$obj_payment->addFieldSetting ( "account", "???" );
+$obj_payment->addFieldSetting ( "secret", "???");
 
 //include dummy order data
 include_once "../../orderdata.php";
