@@ -1,5 +1,6 @@
 <?php
-
+//account = partner_id
+//secret = profile_id
 require_once ( 'Mollie/iDEAL/Payment.php');
 
 use \PHPpayments\Common\Payment_Integration;
@@ -10,9 +11,14 @@ class Payment_Integration_Mollieideal extends  Payment_Integration implements  P
 	public $url_submit = "";
 	public $shortname = "mollieideal";
 	
+
 	public function getPaymentOptions() 
 	{
-		$arr_banks = $iDEAL->getBanks();
+		$obj_ideal = new Mollie_iDEAL_Payment ($this->arr_settings['account']);
+		if ($this->testmode == true) {
+			$obj_ideal->setTestmode(true);
+		}
+		$arr_banks = $obj_ideal->getBanks();
 		if(!is_array($arr_banks)) // If no banks were available, return an empty array. Not sure if we can add a custom error or return false in this case
 			$arr_banks = array();
 
@@ -21,26 +27,31 @@ class Payment_Integration_Mollieideal extends  Payment_Integration implements  P
 	
 	public function enableTestMode() 
 	{
-		$iDEAL->setTestMode();
-
 		return parent::enableTestMode();
 	}
 	
 	public function preparePayment() 
 	{
-		$mideal = new Mollie_iDEAL_Payment ($this->arr_settings['partner_id']);
+		$obj_ideal = new Mollie_iDEAL_Payment ($this->arr_settings['account']);
 
-		if(isset($this->arr_settings['profile_key']) && !empty($this->arr_settings['profile_key']))
-			$mideal->setProfileKey($this->arr_settings['profile_key']);
+		if(isset($this->arr_settings['secret']) && !empty($this->arr_settings['secret']))
+			$obj_ideal->setProfileKey($this->arr_settings['secret']);
 
+		
+		//test
+		if ($this->testmode == true) {
+			$obj_ideal->setTestmode(true);
+		}
+		
+		
 		$bank = $this->paymentoption; // The chosen bank id
-		$amount = $this->arr_order['total'];
+		$amount = $this->arr_order['total']*100;
 		$description = "order: " . $this->arr_order ['id'];
 		$return_url = $this->url_return_success; // Solidshops got $this->url_return_cancel as well, but Mollie doesn't support it
 		$report_url = $this->url_callback;
-		if($mideal->createPayment($bank, $amount, $description, $return_url, $report_url))
+		if($obj_ideal->createPayment($bank, $amount, $description, $return_url, $report_url))
 		{
-			$this->url_integration = $mideal->getBankURL();
+			$this->url_integration = $obj_ideal->getBankURL();
 			return true;
 		}
 		
@@ -50,21 +61,24 @@ class Payment_Integration_Mollieideal extends  Payment_Integration implements  P
 	public function validateIpn($arr_params)
 	{
 		try {
+			$obj_ideal = new Mollie_iDEAL_Payment ($this->arr_settings['account']);
+			
+			
 			parent::validateIpn();
 			
-			$iDEAL = new Mollie_iDEAL_Payment ($this->arr_settings['partner_id']);
-
-			$iDEAL->checkPayment($arr_params['transaction_id']);
 			
-			if($iDEAL->getBankStatus() == 'Success')
+
+			$obj_ideal->checkPayment($arr_params['transaction_id']);
+			
+			if($obj_ideal->getBankStatus() == 'Success')
 			{
 				$this->payment_result->confirmed = 1;
 			}
-			elseif($iDEAL->getBankStatus() != 'CheckedBefore')
+			elseif($this->obj_ideal->getBankStatus() != 'CheckedBefore')
 			{
 				$this->payment_result->confirmed = 0;
 			}
-			$this->payment_result->log .= "Transaction ".$arr_params['transaction_id']." recorded with Bank status: " . $iDEAL->getBankStatus();
+			$this->payment_result->log .= "Transaction ".$arr_params['transaction_id']." recorded with Bank status: " . $obj_ideal->getBankStatus();
 		
 		} catch ( Exception $e ) {
 			$this->payment_result->log .= "CATCH" . print_r ( $e, true );
