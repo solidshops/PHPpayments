@@ -1,150 +1,163 @@
 <?php
-//account = partner_id
-//secret = profile_id
-require_once ( 'Multisafepay/MultiSafepay.combined.php');
+// account = partner_id
+// secret = profile_id
+require_once ('Multisafepay/MultiSafepay.combined.php');
 
 use \PHPpayments\Common\Payment_Integration;
 use \PHPpayments\Common\Payment_IntegrationInterface;
-
-class Payment_Integration_Multisafepay extends  Payment_Integration implements  Payment_IntegrationInterface {
-	
+class Payment_Integration_Multisafepay extends Payment_Integration implements Payment_IntegrationInterface {
 	public $url_submit = "";
 	public $shortname = "multisafepay";
+	public $obj_msp = null;
+	public $msp_payment_product = null;
 	
-
-	public function getPaymentOptions() 
-	{
-		$obj_ideal = new Mollie_iDEAL_Payment ($this->arr_settings['account']);
-		if ($this->testmode == true) {
-			$obj_ideal->setTestmode(true);
+	function __construct(array $arr_options = null) {
+		parent::__construct ( $arr_options );
+		$this->obj_msp = new MultiSafepay ();
+	}
+	public function addFieldSetting($key, $value) {
+		$key = strtolower ( $key );
+		$this->arr_settings [$key] = $value;
+		switch ($key) {
+			case "account" :
+				$this->obj_msp->merchant ['account_id'] = $this->arr_settings ['account'];
+				break;
+			case "secret" :
+				$this->obj_msp->merchant ['site_id'] = $this->arr_settings ['secret'];
+				break;
+			case "secret2" :
+				$this->obj_msp->merchant ['site_code'] = $this->arr_settings ['secret2'];
+				break;
+			case "payment_product" ://connect or fastcheckout
+				$this->msp_payment_product = $this->arr_settings ['payment_product'];
+				break;
 		}
-		$arr_banks = $obj_ideal->getBanks();
-		if(!is_array($arr_banks)) // If no banks were available, return an empty array. Not sure if we can add a custom error or return false in this case
-			$arr_banks = array();
-
-		return $arr_banks;
 	}
-	
-	public function enableTestMode() 
-	{
-		return parent::enableTestMode();
+	public function getPaymentOptions() {
+		var_dump ( $this->obj_msp->getGateways () );
 	}
-	
-	public function preparePayment() 
-	{
-	$msp = new MultiSafepay();
-
-/* 
- * Merchant Settings
- */
-$msp->test                         = true;
-$msp->merchant['account_id']       = '90057058';
-$msp->merchant['site_id']          = '3844';
-$msp->merchant['site_code']        = '707359';
-
-
-$msp->merchant['notification_url'] = BASE_URL . 'notify.php?type=initial';
-$msp->merchant['cancel_url']       = BASE_URL . 'index.php';
-// optional automatic redirect back to the shop:
-// $msp->merchant['redirect_url']     = BASE_URL . 'return.php'; 
-
-/* 
- * Customer Details - supply if available
- */
-$msp->customer['locale']           = 'nl';
-$msp->customer['firstname']        = 'Jan';
-$msp->customer['lastname']         = 'Modaal';
-$msp->customer['zipcode']          = '1234AB';
-$msp->customer['city']             = 'Amsterdam';
-$msp->customer['country']          = 'NL';
-$msp->customer['phone']            = '012-3456789';
-$msp->customer['email']            = 'test@example.com';
-
-$msp->parseCustomerAddress('Teststraat 21');
-// or 
-// $msp->customer['address1']         = 'Teststraat';
-// $msp->customer['housenumber']      = '21';
-
-
- /* 
-  * Delivery address - supply if available
-  */
-  
-/*
-$msp->delivery['firstname']        = 'Piet';
-$msp->delivery['lastname']         = 'Modaal';
-$msp->delivery['zipcode']          = '1234AB';
-$msp->delivery['city']             = 'Amsterdam';
-$msp->delivery['country']          = 'NL';
-$msp->delivery['phone']            = '012-3456789';
-$msp->delivery['email']            = 'test@example.com';
-
-$msp->parseDeliveryAddress('Teststraat 22a');
-*/
-
-/* 
- * Transaction Details
- */
-$msp->transaction['id']            = rand(100000000,999999999); // generally the shop's order ID is used here
-$msp->transaction['currency']      = 'EUR';
-$msp->transaction['amount']        = '56000'; // cents
-$msp->transaction['description']   = 'Order #' . $msp->transaction['id'];
-$msp->transaction['items']         = '<br/><ul><li>1 x Item1</li><li>2 x Item2</li></ul>';
-
-
-/* 
- * Shopping cart
- */
-$c_item = new MspItem(
-   'Test product',
-   'Dit is een test product',
-    3,
-    '12.00',
-    'KG',
-    '1'
-);
-$c_item->SetMerchantItemId('SH123TEST');
-$msp->cart->AddItem($c_item);
-
-
-
-
-
-
-// returns a payment url
-
-$url = $msp->startCheckout();
-
-//echo $msp->request_xml;
-
-if ($msp->error){
-  echo "Error " . $msp->error_code . ": " . $msp->error;
-} elseif (!$msp->error){
-  header("Location: ".$url);
-}
+	public function enableTestMode() {
+		$this->obj_msp->test = true;
+		return parent::enableTestMode ();
 	}
-	
-	public function validateIpn($arr_params)
-	{
+	public function preparePayment() {
+
+		
+
+		
+		$this->obj_msp->merchant ['notification_url'] = $this->url_callback;
+		$this->obj_msp->merchant ['cancel_url'] = $this->url_return_cancel;
+		$this->obj_msp->merchant ['redirect_url'] = $this->url_return_success;
+		
+		/*
+		 * Customer Details - supply if available
+		 */
+		$this->obj_msp->customer ['locale'] = 'nl';
+		
+		$this->obj_msp->customer ['firstname'] = $this->arr_billing ['firstname'];
+		$this->obj_msp->customer ['lastname'] = $this->arr_billing ['lastname'];
+		$this->obj_msp->customer ['zipcode'] = $this->arr_billing ['zip'];
+		$this->obj_msp->customer ['city'] = $this->arr_billing ['city'];
+		$this->obj_msp->customer ['country'] = strtoupper ( $this->arr_billing ['country'] );
+		$this->obj_msp->customer ['phone'] = $this->arr_billing ['phone'];
+		$this->obj_msp->customer ['email'] = $this->arr_order ['email'];
+		$this->obj_msp->parseCustomerAddress ( $this->arr_billing ['address1'] );
+		
+		$this->obj_msp->delivery ['firstname'] = $this->arr_shipping ['firstname'];
+		$this->obj_msp->delivery ['lastname'] = $this->arr_shipping ['lastname'];
+		$this->obj_msp->delivery ['zipcode'] = $this->arr_shipping ['zip'];
+		$this->obj_msp->delivery ['city'] = $this->arr_shipping ['city'];
+		$this->obj_msp->delivery ['country'] = strtoupper ( $this->arr_shipping ['country'] );
+		$this->obj_msp->delivery ['phone'] = $this->arr_shipping ['phone'];
+		$this->obj_msp->delivery ['email'] = $this->arr_order ['email'];
+		
+		$this->obj_msp->parseCustomerAddress ( $this->arr_shipping ['address1'] );
+		
+		/*
+		 * Transaction Details
+		 */
+		$this->obj_msp->transaction ['id'] = $this->arr_order ['id'] + rand ( 0, 100000 );
+		$this->obj_msp->transaction ['currency'] = $this->arr_order ['currency'];
+		$this->obj_msp->transaction ['amount'] = ( int ) ($this->arr_order ['total'] * 100);
+		$this->obj_msp->transaction ['description'] = 'Order #' . $this->obj_msp->transaction ['id'];
+		$this->obj_msp->transaction ['items'] = 'Order: #' + $this->arr_order ['id'];
+		
+		
+		// $msp->transaction ['gateway'] = 'IDEAL';
+		if($this->paymentoption <> ""){
+			$this->obj_msp->transaction ['gateway'] = $this->paymentoption;
+		}
+		
+		switch($this->msp_payment_product){
+			case "connect":
+				$url = $this->obj_msp->startTransaction ();
+				break;
+			case "fastcheckout":
+				$url = $this->obj_msp->startCheckout ();
+				break;
+		}
+
+		
+		if ($this->obj_msp->error) {
+			echo "Error " . $this->obj_msp->error_code . ": " . $this->obj_msp->error;
+			return false;
+		} elseif (! $this->obj_msp->error) {
+			$this->url_integration = $url;
+			return true;
+		}
+	}
+	public function validateIpn($arr_params) {
+		
 		try {
-			$obj_ideal = new Mollie_iDEAL_Payment ($this->arr_settings['account']);
+				
+			parent::validateIpn ();
+				
+	
+			// transaction id (same as the transaction->id given in the transaction request)
+			$transactionid = $_GET['transactionid'];
+			
+			// (notify.php?type=initial is used as notification_url and should output a link)
+			$initial       = ($_GET['type'] == "initial");
+			
+	
+			
+			/*
+			 * Transaction Details
+			*/
+			$this->obj_msp->transaction['id']            = $transactionid;
 			
 			
-			parent::validateIpn();
+			// returns the status
+			$status = $this->obj_msp->getStatus();
 			
-			
-
-			$obj_ideal->checkPayment($arr_params['transaction_id']);
-			
-			if($obj_ideal->getBankStatus() == 'Success')
-			{
-				$this->payment_result->confirmed = 1;
+			if ($this->obj_msp->error && !$initial){ // only show error if we dont need to display the link
+				echo "Error " . $this->obj_msp->error_code . ": " . $this->obj_msp->error;
+				exit();
 			}
-			elseif($this->obj_ideal->getBankStatus() != 'CheckedBefore')
-			{
-				$this->payment_result->confirmed = 0;
+			
+			switch ($status) {
+				case "initialized": // waiting
+					break;
+				case "completed":   // payment complete
+					break;
+				case "uncleared":   // waiting (credit cards or direct debit)
+					break;
+				case "void":        // canceled
+					break;
+				case "declined":    // declined
+					break;
+				case "refunded":    // refunded
+					break;
+				case "expired":     // expired
+					break;
+				default:
 			}
-			$this->payment_result->log .= "Transaction ".$arr_params['transaction_id']." recorded with Bank status: " . $obj_ideal->getBankStatus();
+			
+			if (!$initial){
+						// link to notify.php for MultiSafepay back-end (for delayed payment notifications)
+				// backend expects an "ok" if no error occurred
+				echo "ok";
+			}
 		
 		} catch ( Exception $e ) {
 			$this->payment_result->log .= "CATCH" . print_r ( $e, true );
@@ -153,5 +166,8 @@ if ($msp->error){
 		}
 		
 		return $this->payment_result;
+		
+		
+		
 	}
 }
