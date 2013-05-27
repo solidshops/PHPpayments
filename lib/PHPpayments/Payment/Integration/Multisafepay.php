@@ -76,7 +76,7 @@ class Payment_Integration_Multisafepay extends Payment_Integration implements Pa
 		/*
 		 * Transaction Details
 		 */
-		$this->obj_msp->transaction ['id'] = $this->arr_order ['id'] + rand ( 0, 100000 );
+		$this->obj_msp->transaction ['id'] = $this->arr_order ['id'];// + rand ( 0, 100000 );
 		$this->obj_msp->transaction ['currency'] = $this->arr_order ['currency'];
 		$this->obj_msp->transaction ['amount'] = ( int ) ($this->arr_order ['total'] * 100);
 		$this->obj_msp->transaction ['description'] = 'Order #' . $this->obj_msp->transaction ['id'];
@@ -114,10 +114,10 @@ class Payment_Integration_Multisafepay extends Payment_Integration implements Pa
 				
 	
 			// transaction id (same as the transaction->id given in the transaction request)
-			$transactionid = $_GET['transactionid'];
+			$transactionid = $arr_params['transactionid'];
 			
 			// (notify.php?type=initial is used as notification_url and should output a link)
-			$initial       = ($_GET['type'] == "initial");
+			$initial       = ($arr_params['type'] == "initial");
 			
 	
 			
@@ -137,21 +137,31 @@ class Payment_Integration_Multisafepay extends Payment_Integration implements Pa
 			
 			switch ($status) {
 				case "initialized": // waiting
+					$this->payment_result->confirmed = 0;
 					break;
 				case "completed":   // payment complete
+					$this->payment_result->confirmed = 1;
 					break;
 				case "uncleared":   // waiting (credit cards or direct debit)
+					$this->payment_result->confirmed = 0;
 					break;
 				case "void":        // canceled
+					$this->payment_result->confirmed = 0;
 					break;
 				case "declined":    // declined
+					$this->payment_result->confirmed = 0;
 					break;
 				case "refunded":    // refunded
+					$this->payment_result->confirmed = 0;
 					break;
 				case "expired":     // expired
+					$this->payment_result->confirmed = 0;
 					break;
 				default:
 			}
+			
+			$this->ipn_result->transaction = $transactionid;
+			$this->payment_result->log .= "Transaction $transactionid recorded with Bank status: $status";;
 			
 			if (!$initial){
 						// link to notify.php for MultiSafepay back-end (for delayed payment notifications)
