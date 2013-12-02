@@ -1,11 +1,11 @@
 <?php
 
-include_once '../../../lib/PHPpayments/Loader.php';
+include_once '../../../src/PHPpayments/Loader.php';
 
 $domain = "http://www.domain.com";
 $paymentmethod = "Payment_Integration_Googlecheckout";
 
-$obj_payment = PHPpayments_Loader::load ( $paymentmethod );
+$obj_payment = P\PHPpayments\Loader::load ( $paymentmethod );
 
 //set credentials
 $obj_payment->addFieldSetting ( "account", "???Google Merchant ID???" );

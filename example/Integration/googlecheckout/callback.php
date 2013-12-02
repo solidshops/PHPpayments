@@ -1,9 +1,9 @@
 <?php
-include_once '../../../lib/PHPpayments/Loader.php';
+include_once '../../../src/PHPpayments/Loader.php';
 
 
 $paymentmethod = "Payment_Integration_Googlecheckout";
-$obj_payment = PHPpayments_Loader::load ( $paymentmethod );
+$obj_payment = \PHPpayments\Loader::load ( $paymentmethod );
 
 
 //get payment details from google
