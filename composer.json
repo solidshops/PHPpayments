@@ -1,0 +1,9 @@
+{
+    "name": "solidshops/phppayments",
+    "type": "library",
+    "description": "solidshops phppayments library",
+    "keywords": ["solidshops"],
+     "autoload": {
+        "psr-0": { "PHPpayments": "src/" }
+    }
+}
