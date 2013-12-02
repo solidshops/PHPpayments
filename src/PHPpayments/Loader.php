@@ -4,7 +4,8 @@
  * dirname(__FILE__).'/Payment'); echo get_include_path();
  */
 // include_once dirname(__FILE__).'/Payment';
-class PHPpayments_Loader {
+namespace PHPpayments;
+class Loader {
 	static function load($paymentmethod) {
 		$paymentmethod = strtolower ( $paymentmethod );
 
