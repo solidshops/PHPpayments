@@ -1,6 +1,6 @@
 <?php
 namespace PHPpayments\Common;
-abstract class Payment_Offline extends Payment implements OfflineInterface {
+abstract class Payment_Offline extends Payment implements Payment_OfflineInterface {
 	function __construct(array $arr_options = null) {
 		parent::__construct ( $arr_options );
 		$this->type = "offline";
