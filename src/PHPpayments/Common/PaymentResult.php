@@ -1,5 +1,5 @@
 <?php
-namespace lib\PHPpayments\Common;
+namespace PHPpayments\Common;
 /*
  * errors
  * 001 -> An error occured

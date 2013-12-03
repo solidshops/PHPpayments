@@ -1,6 +1,6 @@
 <?php
 
-namespace lib\PHPpayments\Common;
+namespace PHPpayments\Common;
 
 interface Payment_OfflineInterface {
 }
