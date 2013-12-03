@@ -25,7 +25,7 @@ class Loader {
 				require_once dirname ( __FILE__ ) . "/common/Integration.php";
 				require_once dirname ( __FILE__ ) . "/Payment/Integration/" . ucfirst ( $arr_folders [2] ) . ".php";
 				break;
-			case "Offline" :
+			case "offline" :
 				require_once dirname ( __FILE__ ) . "/common/OfflineInterface.php";
 				require_once dirname ( __FILE__ ) . "/common/Offline.php";
 				require_once dirname ( __FILE__ ) . "/Payment/Offline/" . ucfirst ( $arr_folders [2] ) . ".php";
