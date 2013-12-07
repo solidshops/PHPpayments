@@ -74,7 +74,7 @@ class Payment_Integration_Googlecheckout extends  Payment_Integration implements
 		
 		$Gcart->SetContinueShoppingUrl ( $this->url_return_success );
 		
-		$Gitem = new GoogleItem ( $this->arr_order ['orderID'], "Your Purchase (Order reference #" . $this->arr_order ['id'] . ")", 1, $this->arr_order ['total'] );
+		$Gitem = new GoogleItem ( $this->arr_order ['id'], "Your Purchase (Order reference #" . $this->arr_order ['id'] . ")", 1, $this->arr_order ['total'] );
 		$Gcart->AddItem ( $Gitem );
 		
 		$Gcart->SetMerchantPrivateData ( new MerchantPrivateData ( array ('shopguid' => $this->arr_settings ['shopguid'], 'orderguid' => $this->arr_order ['guid'], 'ip-address' => $_SERVER ['REMOTE_ADDR'] ) ) );
