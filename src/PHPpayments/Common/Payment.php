@@ -21,8 +21,18 @@ abstract class Payment {
 	
 	function __construct(array $arr_options = null) {
 		$this->paymentmethod = strtolower ( $arr_options ['paymentmethod'] );
-		$this->arr_settings ['ip'] = $_SERVER ['REMOTE_ADDR'];
-		$this->arr_settings ['language'] = substr ( strtolower ( $_SERVER ['HTTP_ACCEPT_LANGUAGE'] ), 0, 2 );
+		
+		$remote_addr = $_SERVER ['REMOTE_ADDR'];
+		if($remote_addr <> ""){
+			$this->arr_settings ['ip'] = $remote_addr;	
+		}
+		
+		$http_accept_language = $_SERVER ['HTTP_ACCEPT_LANGUAGE'];
+		if($http_accept_language <> ""){
+			$this->arr_settings ['language'] = substr ( strtolower ( $http_accept_language ), 0, 2 );	
+		}
+		
+		
 	}
 	public function enableTestMode() {
 		$this->testmode = true;
