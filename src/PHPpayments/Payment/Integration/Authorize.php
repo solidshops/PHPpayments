@@ -40,19 +40,12 @@ class Payment_Integration_Authorize extends  Payment_Integration implements  Pay
 		
 
 		$this->arr_payment ['orderguid'] = $this->arr_order ['guid'];
-		$this->arr_payment ['shopguid'] = $this->arr_settings ['shopguid']; //or
 		
-
-		//https on qa does not work
-		//fields below are called from authnet server and show from authnet site
-		//true ipn is called from setting the silent url
-		//$arr_authorize ['x_Relay_Response'] = 'TRUE';
-		//$arr_authorize ['x_Relay_URL'] = "http://ipn.779c51439510f74a74945990ace89b4d.info/authorize"; // Specify the url where authorize.net will send the IPN
+		if(isset($this->arr_settings ['shopguid'])){
+			$this->arr_payment ['shopguid'] = $this->arr_settings ['shopguid'];
+		}
+		 
 		
-
-		//$arr_authorize ['x_currency_code'] = $this->arr_order ['currency'];
-		
-
 		$this->arr_payment ['x_first_name'] = $this->arr_billing ['firstname'];
 		$this->arr_payment ['x_last_name'] = $this->arr_billing ['lastname'];
 		$this->arr_payment ['x_company'] = $this->arr_billing ['companyname'];
