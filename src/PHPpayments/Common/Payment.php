@@ -27,6 +27,8 @@ abstract class Payment {
 			if($remote_addr <> ""){
 				$this->arr_settings ['ip'] = $remote_addr;	
 			}
+		}else{
+			$this->arr_settings ['ip'] = "127.0.0.1"; 
 		}
 		
 		if(isset($_SERVER ['HTTP_ACCEPT_LANGUAGE'])){
