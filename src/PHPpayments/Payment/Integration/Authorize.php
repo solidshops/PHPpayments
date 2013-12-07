@@ -31,7 +31,7 @@ class Payment_Integration_Authorize extends  Payment_Integration implements  Pay
 		$this->arr_payment ['x_Version'] = '3.0';
 		$this->arr_payment ['x_Show_Form'] = 'PAYMENT_FORM';
 		$this->arr_payment ['x_Login'] = $this->arr_settings ['account'];
-		$this->arr_payment ['x_fp_sequence'] = $this->arr_order ['orderID']; //invoice nr
+		$this->arr_payment ['x_fp_sequence'] = $this->arr_order ['id']; //invoice nr
 		$this->arr_payment ['x_fp_timestamp'] = time ();
 		
 		$this->arr_payment ['x_receipt_link_method'] = "POST";
