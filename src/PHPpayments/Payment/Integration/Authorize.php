@@ -73,7 +73,7 @@ class Payment_Integration_Authorize extends  Payment_Integration implements  Pay
 		//order
 		$this->arr_payment ['x_Description'] = "";
 		$this->arr_payment ['x_Amount'] = $this->arr_order ['total'];
-		$this->arr_payment ['x_Invoice_num'] = $this->arr_order ['orderID'];
+		$this->arr_payment ['x_Invoice_num'] = $this->arr_order ['id'];
 		$this->arr_payment ['x_Cust_ID'] = "";
 		
 		//hash
