@@ -36,6 +36,8 @@ abstract class Payment {
 			if($http_accept_language <> ""){
 				$this->arr_settings ['language'] = substr ( strtolower ( $_SERVER ['HTTP_ACCEPT_LANGUAGE'] ), 0, 2 );	
 			}
+		}else{
+			$this->arr_settings ['language'] = "";
 		}
 		
 		
