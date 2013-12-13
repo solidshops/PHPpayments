@@ -99,7 +99,7 @@ class Payment_Integration_Multisafepay extends Payment_Integration implements Pa
 
 		
 		if ($this->obj_msp->error) {
-			echo "Error " . $this->obj_msp->error_code . ": " . $this->obj_msp->error;
+			//echo "Error " . $this->obj_msp->error_code . ": " . $this->obj_msp->error;
 			return false;
 		} elseif (! $this->obj_msp->error) {
 			$this->url_integration = $url;
