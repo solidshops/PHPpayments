@@ -1,10 +1,17 @@
 <?php
 error_reporting(E_ALL);
 /*
-*	This is de default combined class that can be used to create and start your transactions with Multisafepay
+*	This is de default combined class that can be used to create and start your transactions with Multisafepay yet
 *	Version = 1.0.0
 *	Multisafepay
 */
+
+
+/*
+ * changed line 796 - 999 until new msp version(end 2013) for fastcheckout fix since we don't support shipping methodes
+ *
+*/
+
 
 class MultiSafepay {
 	var $plugin_name	 				= 	'';
@@ -793,6 +800,9 @@ class MultiSafepay {
 													' . $this->fields_xml . '
 													' . $ganalytics . '		
 													' . $use_shipping_xml . ' 
+													<checkout-settings>
+													  <no-shipping-method>true</no-shipping-method>
+													</checkout-settings>
 													<transaction>
 														<id>' .               $this->xmlEscape($this->transaction['id']) 			. '</id>
 														<currency>' .         $this->xmlEscape($this->transaction['currency']) 		. '</currency>
