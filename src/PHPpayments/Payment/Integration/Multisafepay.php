@@ -34,7 +34,7 @@ class Payment_Integration_Multisafepay extends Payment_Integration implements Pa
 		}
 	}
 	public function getPaymentOptions() {
-		var_dump ( $this->obj_msp->getGateways () );
+		//var_dump ( $this->obj_msp->getGateways () );
 	}
 	public function enableTestMode() {
 		$this->obj_msp->test = true;
