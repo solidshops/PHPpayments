@@ -69,7 +69,7 @@ class Payment_Integration_Twocheckout extends  Payment_Integration implements  P
 			
 			parent::validateIpn ();
 			
-			$hashbase = $arr_params['sale_id'].$arr_params['vendor_id'].$arr_params['invoice_id']."tango";
+			$hashbase = $arr_params['sale_id'].$arr_params['vendor_id'].$arr_params['invoice_id'].$this->arr_settings ['secret'];
 			$rehash = strtoupper(md5($hashbase));
 			if($rehash == $arr_params['md5_hash'])
 			{
