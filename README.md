@@ -6,9 +6,12 @@ Payment wrapper class for PHP
 
 #composer
 
-    ``` json
-    {
-        "require": {
-            "solidshops/phppayments": "dev-master"
-        }
-    }
+
+```json
+{
+	"require": {
+		"solidshops/phppayments": "dev-master"
+	}
+}
+```
+
