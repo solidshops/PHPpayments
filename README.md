@@ -33,10 +33,9 @@ You can [download the latest version](http://github.com/solidshops/phppayments/z
 * [Sisow](https://www.sisow.nl/)
 * [2checkout](https://www.2checkout.com/)
 
-##PHP example
+##Example
 
 ```php
-<?PHP 
 $paymentmethod = "Payment_Integration_Paypalwebsitepaymentsstandard";
 $obj_payment = \PHPpayments\Loader::load ( $paymentmethod );
 
@@ -100,6 +99,5 @@ $obj_payment->preparePayment ();
 
 //redirect to payment provider
 $obj_payment->processPayment ();
-?>
 
 ```
