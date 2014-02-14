@@ -58,10 +58,10 @@ abstract class Payment {
 	
 	public function addFieldOrder($key, $value) {
 		/* guid
-		 * orderID
+		 * id
 		 * currency
-		 * quantity
 		 * total
+		 * email
 		 */
 		$key = strtolower ( $key );
 		if ($key == "orderid" && $this->arr_order ['guid'] == "") {
@@ -72,35 +72,36 @@ abstract class Payment {
 	public function addFieldBilling($key, $value) {
 		/*firstname
 		lastname
+		companyname
 		address1
 		address2
 		city
 		state
 		zip
-		country*/
+		country
+		phone
+		*/
 		$this->arr_billing [strtolower ( $key )] = $value;
 	}
 	
 	public function addFieldShipping($key, $value) {
 		/*firstname
 		lastname
+		companyname
 		address1
 		address2
 		city
 		state
 		zip
-		country*/
+		country
+		phone*/
 		$this->arr_shipping [strtolower ( $key )] = $value;
 	}
 	public function addFieldSetting($key, $value) {
-		/*firstname
-		lastname
-		address1
-		address2
-		city
-		state
-		zip
-		country*/
+		/*account
+		secret
+		secret2
+		shopguid -> for callback in multi-tenant scenario*/
 		$this->arr_settings [strtolower ( $key )] = $value;
 	}
 	
