@@ -15,6 +15,7 @@ abstract class Payment {
 	
 	public $arr_settings = array ();
 	public $arr_order = array ();
+	public $arr_orderitems = array ();
 	public $arr_billing = array ();
 	public $arr_shipping = array ();
 	public $arr_custom = array ();
@@ -61,7 +62,14 @@ abstract class Payment {
 		 * id
 		 * currency
 		 * total
-		 * email
+		 * +email
+		 * +items_quantity
+		 * +items_subtotal
+		 * +items_tax
+		 * +items_total
+		 * +shipping_cost
+		 * +shipping_tax
+		 * +shipping_total
 		 */
 		$key = strtolower ( $key );
 		if ($key == "orderid" && $this->arr_order ['guid'] == "") {
@@ -69,6 +77,18 @@ abstract class Payment {
 		}
 		$this->arr_order [$key] = $value;
 	}
+	
+	public function addArrayOrderItem($key, $arr_orderitem) {
+		/* reference
+		 * quantity
+		 * subtotal
+		 * tax
+		 * total
+		 */
+		$this->arr_orderitems [$key] = $arr_orderitem;
+	}
+	
+	
 	public function addFieldBilling($key, $value) {
 		/*firstname
 		lastname
