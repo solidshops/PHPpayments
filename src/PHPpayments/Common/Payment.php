@@ -81,6 +81,7 @@ abstract class Payment {
 	public function addArrayOrderItem($key, $arr_orderitem) {
 		/* reference
 		 * quantity
+		 * price
 		 * subtotal
 		 * tax
 		 * total
