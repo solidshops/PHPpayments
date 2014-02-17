@@ -18,23 +18,34 @@ class Loader {
 			case "gateway" :
 				require_once dirname ( __FILE__ ) . "/Common/GatewayInterface.php";
 				require_once dirname ( __FILE__ ) . "/Common/Gateway.php";
-				require_once dirname ( __FILE__ ) . "/Payment/Gateway/" . ucfirst ( $arr_folders [2] ) . ".php";
+				$file =   dirname ( __FILE__ ) . "/Payment/Gateway/" . ucfirst ( $arr_folders [2] ) . ".php";
 				break;
 			case "integration" :
 				require_once dirname ( __FILE__ ) . "/Common/IntegrationInterface.php";
 				require_once dirname ( __FILE__ ) . "/Common/Integration.php";
-				require_once dirname ( __FILE__ ) . "/Payment/Integration/" . ucfirst ( $arr_folders [2] ) . ".php";
+				$file =  dirname ( __FILE__ ) . "/Payment/Integration/" . ucfirst ( $arr_folders [2] ) . ".php";
 				break;
 			case "offline" :
 				require_once dirname ( __FILE__ ) . "/Common/OfflineInterface.php";
 				require_once dirname ( __FILE__ ) . "/Common/Offline.php";
-				require_once dirname ( __FILE__ ) . "/Payment/Offline/" . ucfirst ( $arr_folders [2] ) . ".php";
+				$file =  dirname ( __FILE__ ) . "/Payment/Offline/" . ucfirst ( $arr_folders [2] ) . ".php";
 				break;
 		}
-	
-		return new $paymentmethod ( array (
-				"paymentmethod" => $paymentmethod 
-		) );
+		
+		//load class on defaul location or fallback library
+		$return = null;
+		if (file_exists($file)) {
+			require_once $file;
+			$return =  new $paymentmethod ( array (
+					"paymentmethod" => $paymentmethod
+			) );
+		} elseif(class_exists('\PHPpayments\FallbackLoader')) {
+			//a custom PSR-0 fallback loader can be defined in your project
+			$return =  \PHPpayments\FallbackLoader::load($paymentmethod);
+		}
+		
+		return  $return ;
+
 	}
 }
 
