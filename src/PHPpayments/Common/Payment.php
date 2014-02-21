@@ -20,6 +20,9 @@ abstract class Payment {
 	public $arr_shipping = array ();
 	public $arr_custom = array ();
 	
+	public $reference_order_id = "";
+	public $reference_payment_id = "";
+	
 	function __construct(array $arr_options = null) {
 		$this->paymentmethod = strtolower ( $arr_options ['paymentmethod'] );
 		
