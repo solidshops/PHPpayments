@@ -125,7 +125,8 @@ abstract class Payment {
 		/*account
 		secret
 		secret2
-		shopguid -> for callback in multi-tenant scenario*/
+		shopguid -> for callback in multi-tenant scenario
+		environment -> dev, qa,pro...*/
 		$this->arr_settings [strtolower ( $key )] = $value;
 	}
 	
