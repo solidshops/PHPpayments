@@ -15,8 +15,8 @@ VISA	 4111 1111 1111 1111
 Visa 3-D Secure	 4000 0000 0000 0002
 MasterCard	 5399 9999 9999 9999
 American Express	 3741 1111 1111 111
-Krijg je de foutmelding ‘unknown order/0/s‘ wilt dit zeggen dat je geen SHA-1 string hebt meegestuurd. Wat je dus wel degelijk moet doen…
-Krijg je de melding ‘unknown order/1/s‘ dan wil dit zeggen dat de SHA-1 IN hash die Ogone gemaakt heeft niet overeenkomt met de hash die jij gemaakt hebt. Er dus ergens iets foutgelopen bij het maken van uw hash.
+Krijg je de foutmelding â€˜unknown order/0/sâ€˜ wilt dit zeggen dat je geen SHA-1 string hebt meegestuurd. Wat je dus wel degelijk moet doenâ€¦
+Krijg je de melding â€˜unknown order/1/sâ€˜ dan wil dit zeggen dat de SHA-1 IN hash die Ogone gemaakt heeft niet overeenkomt met de hash die jij gemaakt hebt. Er dus ergens iets foutgelopen bij het maken van uw hash.
  */
 use \PHPpayments\Common\Payment_Integration;
 use \PHPpayments\Common\Payment_IntegrationInterface;
@@ -97,6 +97,7 @@ class Payment_Integration_Ogone extends  Payment_Integration implements  Payment
 			$sha_calc = strtoupper ( sha1 ( $stringToHash ) );
 			
 			$sha_post = $post ['SHASIGN'];
+			$this->ipn_result->log .= print_r ( $arr_params, true );
 			$this->ipn_result->log .= "SHA:$sha_post|$sha_calc";
 			if ($sha_post == $sha_calc) {
 				//valid
