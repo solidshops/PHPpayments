@@ -80,30 +80,36 @@ class Payment_Integration_Ogone extends  Payment_Integration implements  Payment
 			parent::validateIpn ();
 			
 			// verify the SHA Sign
-			//$shaCheckFields = array ('AAVADDRESS', 'AAVCHECK', 'AAVZIP', 'ACCEPTANCE', 'ALIAS', 'AMOUNT', 'BRAND', 'CARDNO', 'CCCTY', 'CN', 'COMPLUS', 'CURRENCY', 'CVCCHECK', 'DCC_COMMPERCENTAGE', 'DCC_CONVAMOUNT', 'DCC_CONVCCY', 'DCC_EXCHRATE', 'DCC_EXCHRATESOURCE', 'DCC_EXCHRATETS', 'DCC_INDICATOR', 'DCC_MARGINPERCENTAGE', 'DCC_VALIDHOUS', 'DIGESTCARDNO', 'ECI', 'ED', 'ENCCARDNO', 'IP', 'IPCTY', 'NBREMAILUSAGE', 'NBRIPUSAGE', 'NBRIPUSAGE_ALLTX', 'NBRUSAGE', 'NCERROR', 'ORDERID', 'PAYID', 'PM', 'SCO_CATEGORY', 'SCORING', 'STATUS', 'SUBSCRIPTION_ID', 'TRXDATE', 'VC' );
-			$shaCheckFields = array ('AAVADDRESS', 'AAVCHECK','AAVMAIL','AAVNAME','AAVPHONE', 'AAVZIP', 'ACCEPTANCE', 'ALIAS', 'AMOUNT', 'BIC', 'BIN','BRAND', 'CARDNO', 'CCCTY', 'CN', 'COMPLUS','CREATION_STATUS', 'CREDITDEBIT','CURRENCY', 'CVCCHECK', 'DCC_COMMPERCENTAGE', 'DCC_CONVAMOUNT', 'DCC_CONVCCY', 'DCC_EXCHRATE', 'DCC_EXCHRATESOURCE', 'DCC_EXCHRATETS', 'DCC_INDICATOR', 'DCC_MARGINPERCENTAGE', 'DCC_VALIDHOURS', 'DIGESTCARDNO', 'ECI', 'ED', 'ENCCARDNO','FXAMOUNT','FXCURRENCY','IBAN',  'IP', 'IPCTY', 'MOBILEMODE', 'NBREMAILUSAGE', 'NBRIPUSAGE', 'NBRIPUSAGE_ALLTX', 'NBRUSAGE', 'NCERROR', 'NCERRORCARDNO','NCERRORCN','NCERRORCVC','NCERRORED','ORDERID', 'PAYID', 'PM', 'SCO_CATEGORY', 'SCORING', 'STATUS','SUBBRAND', 'SUBSCRIPTION_ID', 'TRXDATE', 'VC' );
+			//$shaCheckFields = array ('AAVADDRESS', 'AAVCHECK','AAVMAIL','AAVNAME','AAVPHONE', 'AAVZIP', 'ACCEPTANCE', 'ALIAS', 'AMOUNT', 'BIC', 'BIN','BRAND', 'CARDNO', 'CCCTY', 'CN', 'COMPLUS','CREATION_STATUS', 'CREDITDEBIT','CURRENCY', 'CVCCHECK', 'DCC_COMMPERCENTAGE', 'DCC_CONVAMOUNT', 'DCC_CONVCCY', 'DCC_EXCHRATE', 'DCC_EXCHRATESOURCE', 'DCC_EXCHRATETS', 'DCC_INDICATOR', 'DCC_MARGINPERCENTAGE', 'DCC_VALIDHOURS', 'DIGESTCARDNO', 'ECI', 'ED', 'ENCCARDNO','FXAMOUNT','FXCURRENCY','IBAN',  'IP', 'IPCTY', 'MOBILEMODE', 'NBREMAILUSAGE', 'NBRIPUSAGE', 'NBRIPUSAGE_ALLTX', 'NBRUSAGE', 'NCERROR', 'NCERRORCARDNO','NCERRORCN','NCERRORCVC','NCERRORED','ORDERID', 'PAYID', 'PM', 'SCO_CATEGORY', 'SCORING', 'STATUS','SUBBRAND', 'SUBSCRIPTION_ID', 'TRXDATE', 'VC' );
 			
-			$post = array_change_key_case ( $arr_params, CASE_UPPER );
+			$arr_check = array_change_key_case ( $arr_params, CASE_UPPER );
+			
+			
 			$signature =  $this->arr_settings ['secret2'];
-			$stringToHash = '';
+
+			ksort($arr_check);
+			unset($arr_check ['SHASIGN']);
+			unset($arr_check ['ORDERGUID']);
 			
-			foreach ( $shaCheckFields as $param ) {
-				if (! isset ( $post [$param] ) || $post [$param] == '') {
-					continue;
-				}
-				
-				$stringToHash .= $param . '=' . $post [$param] . $signature;
+			$stringToHash = "";
+			foreach ( $arr_check as $key => $value ) {
+			    if ( $value == "" ) {
+			       continue;
+			    }
+			    $stringToHash .= $key . '=' . $value . $signature;
 			}
+					
+			
 			
 			$sha_calc = strtoupper ( sha1 ( $stringToHash ) );
 			
-			$sha_post = $post ['SHASIGN'];
+			$sha_post = $arr_params ['SHASIGN'];
 			$this->ipn_result->log .= print_r ( $arr_params, true );
-			$this->ipn_result->log .= "SHA:$sha_post|$sha_calc";
+			$this->ipn_result->log .= "SHASIGN:$sha_post|$sha_calc";
 			if ($sha_post == $sha_calc) {
 				//valid
-				$this->ipn_result->transaction = $post ['PAYID'];
-				if ($post ['ACCEPTANCE'] != "") {
+				$this->ipn_result->transaction = $arr_params ['PAYID'];
+				if ($arr_params ['ACCEPTANCE'] != "" && $arr_params ['STATUS'] == 9) {
 					$this->ipn_result->confirmed = 1;
 				} else {
 					$this->ipn_result->confirmed = 0;
@@ -124,5 +130,3 @@ class Payment_Integration_Ogone extends  Payment_Integration implements  Payment
 	}
 
 }
-
-?>
