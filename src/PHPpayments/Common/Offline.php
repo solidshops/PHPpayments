@@ -6,12 +6,15 @@ abstract class Payment_Offline extends Payment implements Payment_OfflineInterfa
 		$this->type = "offline";
 	}
 	
-public function processPayment() {
+public function processPayment($arr_options = array()) {
 
 		$url = $this->url_return_success;
 		
 		header ( "Location: " . $url );
-		//exit ();
+		
+		if(isset($arr_options['exit']) && $arr_options['exit']){
+		    exit ();
+		}
 	}
 }
 
