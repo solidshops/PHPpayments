@@ -11,7 +11,7 @@ public function processPayment() {
 		$url = $this->url_return_success;
 		
 		header ( "Location: " . $url );
-		exit ();
+		//exit ();
 	}
 }
 
