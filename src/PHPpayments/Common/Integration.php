@@ -36,13 +36,17 @@ abstract class Payment_Integration extends Payment implements Payment_Integratio
 	
 	}
 	
-	 public  function processPayment() {
+	 public  function processPayment($arr_options) {
 		if($this->url_integration == ""){
 			//echo "Error redirecting: no integration url provided";
 			return false;
 		}
+		
 		header ( "Location: " . $this->url_integration );
-		//exit ();
+		
+		if(isset($arr_options['exit']) && $arr_options['exit']){
+		    exit ();
+		}
 	}
 
 }
