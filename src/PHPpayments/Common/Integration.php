@@ -42,7 +42,7 @@ abstract class Payment_Integration extends Payment implements Payment_Integratio
 			return false;
 		}
 		header ( "Location: " . $this->url_integration );
-		exit ();
+		//exit ();
 	}
 
 }
