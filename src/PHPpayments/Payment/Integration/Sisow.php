@@ -37,6 +37,8 @@ class Payment_Integration_Sisow extends  Payment_Integration implements  Payment
 	}
 	
 	public function preparePayment() {
+	    $obj_prepareResult = new \PHPpayments\Common\PrepareResult();
+	    
 		$sisow = new Sisow ( $this->arr_settings ['account'], $this->arr_settings ['secret'] );
 		
 		$sisow->purchaseId = $this->arr_order ['id'];
@@ -57,10 +59,17 @@ class Payment_Integration_Sisow extends  Payment_Integration implements  Payment
 		$sisow->notifyUrl = $this->url_callback;
 		$sisow->callbackUrl = $this->url_callback;
 		if (($ex = $sisow->TransactionRequest ()) < 0) {
-		
+		    $obj_prepareResult->success = false;
+		    $obj_prepareResult->text = $ex;
+		    
 		} else {
+		    $obj_prepareResult->success = true;
+		    $obj_prepareResult->text = $sisow->issuerUrl;
+		    
 			$this->url_integration = $sisow->issuerUrl;
 		}
+		
+		return $obj_prepareResult;
 	}
 	
 public function validateIpn($arr_params) {
