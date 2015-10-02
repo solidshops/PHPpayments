@@ -77,7 +77,7 @@ class Payment_Integration_Ogone extends  Payment_Integration implements  Payment
 	public function validateIpn($arr_params) {
 		try {
 			
-			parent::validateIpn ();
+			parent::validateIpn ($arr_params);
 			
 			// verify the SHA Sign
 			//$shaCheckFields = array ('AAVADDRESS', 'AAVCHECK','AAVMAIL','AAVNAME','AAVPHONE', 'AAVZIP', 'ACCEPTANCE', 'ALIAS', 'AMOUNT', 'BIC', 'BIN','BRAND', 'CARDNO', 'CCCTY', 'CN', 'COMPLUS','CREATION_STATUS', 'CREDITDEBIT','CURRENCY', 'CVCCHECK', 'DCC_COMMPERCENTAGE', 'DCC_CONVAMOUNT', 'DCC_CONVCCY', 'DCC_EXCHRATE', 'DCC_EXCHRATESOURCE', 'DCC_EXCHRATETS', 'DCC_INDICATOR', 'DCC_MARGINPERCENTAGE', 'DCC_VALIDHOURS', 'DIGESTCARDNO', 'ECI', 'ED', 'ENCCARDNO','FXAMOUNT','FXCURRENCY','IBAN',  'IP', 'IPCTY', 'MOBILEMODE', 'NBREMAILUSAGE', 'NBRIPUSAGE', 'NBRIPUSAGE_ALLTX', 'NBRUSAGE', 'NCERROR', 'NCERRORCARDNO','NCERRORCN','NCERRORCVC','NCERRORED','ORDERID', 'PAYID', 'PM', 'SCO_CATEGORY', 'SCORING', 'STATUS','SUBBRAND', 'SUBSCRIPTION_ID', 'TRXDATE', 'VC' );
@@ -104,29 +104,29 @@ class Payment_Integration_Ogone extends  Payment_Integration implements  Payment
 			$sha_calc = strtoupper ( sha1 ( $stringToHash ) );
 			
 			$sha_post = $arr_params ['SHASIGN'];
-			$this->ipn_result->log .= print_r ( $arr_params, true );
-			$this->ipn_result->log .= "SHASIGN:$sha_post|$sha_calc";
+			$this->payment_result->log .= print_r ( $arr_params, true );
+			$this->payment_result->log .= "SHASIGN:$sha_post|$sha_calc";
 			if ($sha_post == $sha_calc) {
 				//valid
-				$this->ipn_result->transaction = $arr_params ['PAYID'];
+				$this->payment_result->transaction = $arr_params ['PAYID'];
 				if ($arr_params ['ACCEPTANCE'] != "" && $arr_params ['STATUS'] == 9) {
-					$this->ipn_result->confirmed = 1;
+					$this->payment_result->confirmed = 1;
 				} else {
-					$this->ipn_result->confirmed = 0;
+					$this->payment_result->confirmed = 0;
 				}
 			
 			} else {
 				//invalid
-				$this->ipn_result->confirmed = 0;
+				$this->payment_result->confirmed = 0;
 			}
 		
 		} catch ( Exception $e ) {
-			$this->ipn_result->log .= "CATCH" . print_r ( $e, true );
-			$this->ipn_result->error = 001;
-			$this->ipn_result->confirmed = 0;
+			$this->payment_result->log .= "CATCH" . print_r ( $e, true );
+			$this->payment_result->error = 001;
+			$this->payment_result->confirmed = 0;
 		}
 		
-		return $this->ipn_result;
+		return $this->payment_result;
 	}
 
 }
