@@ -1,5 +1,5 @@
 {
-    "name": "solidshops/phppayments",
+    "name": "bradcrumb/phppayments",
     "type": "library",
     "description": "solidshops phppayments library",
     "keywords": ["solidshops","php","payments"],
