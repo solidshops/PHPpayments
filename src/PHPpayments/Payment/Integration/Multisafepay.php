@@ -160,7 +160,7 @@ class Payment_Integration_Multisafepay extends Payment_Integration implements Pa
 				default:
 			}
 			
-			$this->ipn_result->transaction = $transactionid;
+			$this->payment_result->transaction = $transactionid;
 			$this->payment_result->log .= "Transaction $transactionid recorded with Bank status: $status";;
 			
 			if (!$initial){

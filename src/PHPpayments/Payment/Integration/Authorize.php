@@ -118,26 +118,26 @@ class Payment_Integration_Authorize extends  Payment_Integration implements  Pay
 			$md5source = $this->arr_settings ['secret'] . $this->arr_settings ['account'] . $arr_params ['x_trans_id'] . $arr_params ['x_amount'];
 			$md5 = md5 ( $md5source );
 			
-			$this->ipn_result->transaction = $arr_params ['x_trans_id'];
+			$this->payment_result->transaction = $arr_params ['x_trans_id'];
 			
 			if ($arr_params ['x_response_code'] == '1') {
 				//
 				if (strtoupper ( $md5 ) != $arr_params ['x_MD5_Hash']) {
-					$this->ipn_result->confirmed = 1;
+					$this->payment_result->confirmed = 1;
 				} else {
-					$this->ipn_result->confirmed = 0;
+					$this->payment_result->confirmed = 0;
 				}
 			} else {
-				$this->ipn_result->confirmed = 0;
+				$this->payment_result->confirmed = 0;
 			}
 		
 		} catch ( Exception $e ) {
-			$this->ipn_result->log .= "CATCH" . print_r ( $e, true );
-			$this->ipn_result->error = 001;
-			$this->ipn_result->confirmed = 0;
+			$this->payment_result->log .= "CATCH" . print_r ( $e, true );
+			$this->payment_result->error = 001;
+			$this->payment_result->confirmed = 0;
 		}
 		
-		return $this->ipn_result;
+		return $this->payment_result;
 	}
 
 }

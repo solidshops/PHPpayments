@@ -94,29 +94,29 @@ class Payment_Integration_Googlecheckout extends  Payment_Integration implements
 		try {
 			parent::validateIpn ( $arr_notifications );
 			
-			$this->ipn_result->transaction = $arr_notifications ['new-order-notification'] ['google-order-number'] ['VALUE'];
+			$this->payment_result->transaction = $arr_notifications ['new-order-notification'] ['google-order-number'] ['VALUE'];
 			
 			$arr_lastchange = end ( $arr_notifications ['order-state-change-notification'] );
 		
 			
 			switch ($arr_lastchange ['new-financial-order-state'] ['VALUE']) {
 				case "CHARGED" :
-					$this->ipn_result->confirmed = 1;
+					$this->payment_result->confirmed = 1;
 					break;
 				default :
-					$this->ipn_result->confirmed = 0;
+					$this->payment_result->confirmed = 0;
 					break;
 			}
 			$Gresponse = new GoogleResponse ( $this->arr_settings ['account'], $this->arr_settings ['secret'] );
 			$ack_response = $Gresponse->SendAck ( $arr_notifications ['serial-number'], false );
 	
 		} catch ( Exception $e ) {
-			$this->ipn_result->log .= "CATCH" . print_r ( $e, true );
-			$this->ipn_result->error = 001;
-			$this->ipn_result->confirmed = 0;
+			$this->payment_result->log .= "CATCH" . print_r ( $e, true );
+			$this->payment_result->error = 001;
+			$this->payment_result->confirmed = 0;
 		}
 	
-		return $this->ipn_result;
+		return $this->payment_result;
 	}
 	
 	/*public function validateIpn($arr_params) {
@@ -125,13 +125,13 @@ class Payment_Integration_Googlecheckout extends  Payment_Integration implements
 			
 			$key_transaction  = key($arr_params);
 			
-			$this->ipn_result->transaction = $arr_params[$key_transaction] ['google-order-number']['VALUE'];
+			$this->payment_result->transaction = $arr_params[$key_transaction] ['google-order-number']['VALUE'];
 			switch ($arr_params[$key_transaction]['order-summary'] ['financial-order-state']['VALUE']) {
 				case "CHARGED" :
-					$this->ipn_result->confirmed = 1;
+					$this->payment_result->confirmed = 1;
 					break;
 				default :
-					$this->ipn_result->confirmed = 0;
+					$this->payment_result->confirmed = 0;
 					break;
 			}
 			
@@ -140,12 +140,12 @@ class Payment_Integration_Googlecheckout extends  Payment_Integration implements
 			$ack_response = $Gresponse->SendAck ( $sn, false );
 		
 		} catch ( Exception $e ) {
-			$this->ipn_result->log .= "CATCH" . print_r ( $e, true );
-			$this->ipn_result->error = 001;
-			$this->ipn_result->confirmed = 0;
+			$this->payment_result->log .= "CATCH" . print_r ( $e, true );
+			$this->payment_result->error = 001;
+			$this->payment_result->confirmed = 0;
 		}
 		
-		return $this->ipn_result;
+		return $this->payment_result;
 	}*/
 
 }

@@ -73,8 +73,8 @@ class Payment_Integration_Twocheckout extends  Payment_Integration implements  P
 			$rehash = strtoupper(md5($hashbase));
 			if($rehash == $arr_params['md5_hash'])
 			{
-				$this->ipn_result->confirmed = 1;//SET TO PAID
-				$this->ipn_result->transaction = $arr_params['sale_id'];//TRANSACTION ID FROM PROVIDER
+				$this->payment_result->confirmed = 1;//SET TO PAID
+				$this->payment_result->transaction = $arr_params['sale_id'];//TRANSACTION ID FROM PROVIDER
 			}
 			else
 			{
@@ -82,12 +82,12 @@ class Payment_Integration_Twocheckout extends  Payment_Integration implements  P
 			}
 				
 		} catch ( Exception $e ) {
-			$this->ipn_result->log .= "CATCH" . print_r ( $e, true );
-			$this->ipn_result->error = 001;
-			$this->ipn_result->confirmed = 0;
+			$this->payment_result->log .= "CATCH" . print_r ( $e, true );
+			$this->payment_result->error = 001;
+			$this->payment_result->confirmed = 0;
 		}
 		
-		return $this->ipn_result;
+		return $this->payment_result;
 	}
 	
 	
