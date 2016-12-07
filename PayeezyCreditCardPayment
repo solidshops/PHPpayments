@@ -1,0 +1,82 @@
+{
+  "merchant_ref": "{string}",
+  "transaction_type": "{string}",
+  "method": "{string}",
+  "amount": "{string}",
+  "partial_redemption": "{string}",
+  "split_tender_id": "{string}",
+  "currency_code": "{string}",
+  "credit_card": {
+    "type": "{string}",
+    "cardholder_name": "{string}",
+    "card_number": "{string}",
+    "exp_date": "{string}",
+    "cvv": "{string}"
+  },
+  "billing_address": {
+    "city": "{string}",
+    "country": "{string}",
+    "email": "{string}",
+    "phone": {
+      "type": "{string}",
+      "number": "{string}"
+    },
+    "street": "{string}",
+    "state_province": "{string}",
+    "zip_postal_code": "{string}"
+  },
+  "soft_descriptors": {
+    "dba_name": "{string}",
+    "street": "{string}",
+    "city": "{string}",
+    "region": "{string}",
+    "mid": "{string}",
+    "mcc": "{string}",
+    "postal_code": "{string}",
+    "country_code": "{string}",
+    "merchant_contact_info": "{string}"
+  },
+  "level2": {
+    "tax1_amount": "{number}",
+    "tax1_number": "{string}",
+    "tax2_amount": "{number}",
+    "tax2_number": "{string}",
+    "customer_ref": "{string}"
+  },
+  "level3": {
+    "alt_tax_amount": "{number}",
+    "alt_tax_id": "{string}",
+    "discount_amount": "{number}",
+    "duty_amount": "{number}",
+    "freight_amount": "{number}",
+    "ship_from_zip": "{string}",
+    "ship_to_address": {
+      "city": "{string}",
+      "state": "{string}",
+      "zip": "{string}",
+      "country": "{string}",
+      "email": "{string}",
+      "name": "{string}",
+      "phone": "{string}",
+      "address_1": "{string}",
+      "customer_number": "{string}"
+    },
+    "line_items": [
+      {
+        "description": "{string}",
+        "quantity": "{string}",
+        "commodity_code": "{string}",
+        "discount_amount": "{number}",
+        "discount_indicator": "{string}",
+        "gross_net_indicator": "{string}",
+        "line_item_total": "{number}",
+        "product_code": "{string}",
+        "tax_amount": "{number}",
+        "tax_rate": "{number}",
+        "tax_type": "{string}",
+        "unit_cost": "{number}",
+        "unit_of_measure": "{string}"
+      }
+    ]
+  }
+}
