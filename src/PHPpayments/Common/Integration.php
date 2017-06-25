@@ -26,7 +26,7 @@ abstract class Payment_Integration extends Payment implements Payment_Integratio
 	}
 	
 	
-	 public  function validateIpn($arr_params) {
+	 public  function validateIpn($arr_params = array()) {
 		$this->payment_result = new PaymentResult ();
 		
 		$log = print_r ( $_SERVER, true ) . "\n";
