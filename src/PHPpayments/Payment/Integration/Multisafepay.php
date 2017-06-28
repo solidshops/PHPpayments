@@ -9,7 +9,7 @@ class Payment_Integration_Multisafepay extends Payment_Integration implements Pa
 	public $url_submit = "";
 	public $shortname = "multisafepay";
 	public $obj_msp = null;
-	public $msp_payment_product = null;
+	public $msp_payment_product = "connect";
 	
 	function __construct(array $arr_options = null) {
 		parent::__construct ( $arr_options );
