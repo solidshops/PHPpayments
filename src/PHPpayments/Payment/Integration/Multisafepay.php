@@ -117,9 +117,10 @@ class Payment_Integration_Multisafepay extends Payment_Integration implements Pa
 			$transactionid = $arr_params['transactionid'];
 			
 			// (notify.php?type=initial is used as notification_url and should output a link)
-			$initial       = ($arr_params['type'] == "initial");
-			
-	
+			$initial = false;
+			if(isset($arr_params['type'])){
+				$initial = ($arr_params['type'] == "initial");
+                    	}
 			
 			/*
 			 * Transaction Details
