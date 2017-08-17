@@ -74,7 +74,7 @@ class Payment_Integration_Mollieideal extends  Payment_Integration implements  P
 			{
 				$this->payment_result->confirmed = 1;
 			}
-			elseif($this->obj_ideal->getBankStatus() != 'CheckedBefore')
+			elseif($obj_ideal->getBankStatus() != 'CheckedBefore')
 			{
 				$this->payment_result->confirmed = 0;
 			}
