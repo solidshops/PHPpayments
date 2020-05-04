@@ -5,5 +5,8 @@
     "keywords": ["solidshops","php","payments"],
      "autoload": {
         "psr-0": { "PHPpayments": "src/" }
+    },
+    "require": {
+        "mollie/mollie-api-php": "^2.0"
     }
 }
